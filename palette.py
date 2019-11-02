@@ -11,5 +11,5 @@ for line in sys.stdin:
 		colours.append(tuple(map(int, sub.strip("\n").split(","))))
 		pltcolours.append([tuple(map(int, sub.strip("\n").split(",")))])
 
-# plt.imshow(pltcolours)
-# plt.show()
+plt.imshow(pltcolours)
+plt.show()
