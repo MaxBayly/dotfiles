@@ -1,0 +1,18 @@
+#!/bin/bash
+
+colourshex=$(convert "$1" -format %c -colorspace LAB -colors 6 histogram:info:- | sed -e 's/.*) \(.*\)s.*/\1/');
+
+
+hexes=($colourshex)
+sed -i "s/#define COLOR.*/#define COLOR (${hexes[4]} * ((d\/80)+1))/g" /home/rroche/.config/glava/radial.glsl
+#sed -i 
+glavaRunning=$(pgrep glava)
+if [ $glavaRunning ] 
+then
+	kill -9 $glavaRunning
+	#pkill glava 2>/dev/null; 
+	exec glava &
+fi
+
+# coloursrgb=$(convert "$1" -format %c -colorspace LAB -colors 6 histogram:info:- | cut -d "s" -f 2 | tr -d "srgb" | tr -d "(" | tr -d ")");
+# echo $coloursrgb | python3 /home/rroche/repos/dotfiles/palette.py;

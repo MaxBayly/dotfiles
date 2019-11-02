@@ -1,4 +1,5 @@
 #~/.screenlayout/custom.sh
+export PATH=$PATH:/home/rroche/repos/dotfiles/
 alias plex="sudo apfs-fuse -o allow_other /dev/nvme0n1p2 /media/rroche/macos; sudo mount -t hfsplus -o force,rw /dev/sdc2 /media/storagemount; sudo systemctl start plexmediaserver.service; chromium --new-window http://192.168.0.40:32400/web/index.html# &"
 #; sudo chmod 777 /run/media/rroche"
 function aur() {
@@ -13,11 +14,11 @@ alias editconf="code ~/repos/dotfiles/"
 alias suspend="i3lock-fancy -pg -t '' && systemctl suspend"
 alias media="sudo mount -t hfsplus -o force,rw /dev/sdc2 /media/storagemount"
 alias wifi="sudo systemctl restart netctl@idk2.service"
-function back() {feh -q --bg-fill ~/Pictures/"$1".jpg>/dev/null || feh -q --bg-fill ~/Pictures/"$1".png} 2> /dev/null
+function back() {chgbckg "$1"}
 
-function picker() {
-    ./picker.sh "$1"
-}
+# function picker() {
+#     picker.sh "$1"
+# }
 #; kstart5 chromium --new-window notion.so --desktop 4"
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
