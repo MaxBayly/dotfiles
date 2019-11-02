@@ -14,6 +14,10 @@ alias suspend="i3lock-fancy -pg -t '' && systemctl suspend"
 alias media="sudo mount -t hfsplus -o force,rw /dev/sdc2 /media/storagemount"
 alias wifi="sudo systemctl restart netctl@idk2.service"
 function back() {feh -q --bg-fill ~/Pictures/"$1".jpg>/dev/null || feh -q --bg-fill ~/Pictures/"$1".png} 2> /dev/null
+
+function picker() {
+    ./picker.sh "$1"
+}
 #; kstart5 chromium --new-window notion.so --desktop 4"
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
