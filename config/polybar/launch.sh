@@ -10,14 +10,18 @@ while pgrep -u $UID -x polybar >/dev/null; do sleep 1; done
 sleep 1
 
 # Launch bar
-if type "xrandr"; then
-  for m in $(xrandr --query | grep " connected" | cut -d" " -f1); do
-    MONITOR=$m polybar -c $HOME/.config/polybar/config -r main 2> /tmp/polybar_log &
-    echo $m
-  done
-else
-  polybar -c $HOME/.config/polybar/config -r example 2> /tmp/polybar_log &
-fi
+# if type "xrandr"; then
+#   for m in $(xrandr --query | grep " connected" | cut -d" " -f1); do
+#     MONITOR=$m polybar -c $HOME/.config/polybar/config -r main 2>/tmp/polybar_log &
+#     #echo $m
+#   done
+# else
+#   polybar -c $HOME/.config/polybar/config -r example 2> /tmp/polybar_log &
+# fi
+for m in $(xrandr --query | grep " connected" | cut -d" " -f1); do
+    MONITOR=$m polybar -c $HOME/.config/polybar/config -r main 2>/tmp/polybar_log &
+    #echo $m
+done
 
-echo "Bars launched..."
+#echo "Bars launched..."
 
