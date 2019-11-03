@@ -12,9 +12,9 @@ alias notion="chromium --new-window www.notion.so"
 alias startup="minetime &;mailspring &"
 alias editconf="code ~/repos/dotfiles/"
 alias suspend="i3lock-fancy -pg -t '' && systemctl suspend"
-alias media="sudo mount -t hfsplus -o force,rw /dev/sdc2 /media/storagemount"
+alias media="sudo mount -t hfsplus -o force,rw /dev/sdc2 /media/storagemount; sudo apfs-fuse -o allow_other /dev/nvme0n1p2 /media/rroche/macos"
 alias wifi="sudo systemctl restart netctl@idk2.service"
-function back() {chgbckg "$1"}
+function theme() {chgbckg "$1"}
 
 # function picker() {
 #     picker.sh "$1"

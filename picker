@@ -2,7 +2,7 @@
 
 #colourshex=$(convert "$1" -format %c -colorspace LAB -colors 6 histogram:info:- | sed -e 's/.*) \(.*\)s.*/\1/');
 
-thief=$(python thief.py "$1" 2>&1)
+thief=$(python /home/rroche/repos/dotfiles/thief.py "$1" 2>&1)
 hexes=($thief)
 sed -i "s/#define COLOR.*/#define COLOR (${hexes[4]} * ((d\/80)+1))/g" /home/rroche/.config/glava/radial.glsl
 sed -i "s/under =.*/under = ${hexes[5]}/g" $HOME/.config/polybar/colors.ini
