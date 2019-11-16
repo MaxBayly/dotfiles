@@ -17,7 +17,7 @@
 /* Amplify magnitude of the results each bar displays */
 #define AMPLIFY 300
 /* Bar color */ 
-#define COLOR mix(#5e493d, #e159a2, clamp(d/80, 0, 1))
+#define COLOR mix(#5b5d66, #bf936a, clamp(d/80, 0, 1))
 
 /* Angle (in radians) for how much to rotate the visualizer */
 #define ROTATE (PI / 2)

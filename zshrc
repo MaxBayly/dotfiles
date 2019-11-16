@@ -1,7 +1,9 @@
 #~/.screenlayout/custom.sh
 export PATH=$PATH:/home/rroche/repos/dotfiles/
-alias plex="sudo apfs-fuse -o allow_other /dev/nvme0n1p2 /media/rroche/macos; sudo mount -t hfsplus -o force,rw /dev/sdc2 /media/storagemount; sudo systemctl start plexmediaserver.service; chromium --new-window http://192.168.0.40:32400/web/index.html# &"
-#; sudo chmod 777 /run/media/rroche"
+export KUNST_MUSIC_DIR=/store/medix/Music/
+export KUNST_SIZE="1000x1000"
+alias plex="sudo systemctl start plexmediaserver.service; chromium --new-window http://192.168.0.40:32400/web/index.html# &"
+#; sudo chmod 777 /run/media/rroche" sudo apfs-fuse -o allow_other /dev/nvme0n1p2 /media/rroche/macos; sudo mount -t hfsplus -o force,rw /dev/sdc2 /media/storagemount; 
 function aur() {
 	git clone https://aur.archlinux.org/"$1".git ~/repos/aur/"$1" && cd ~/repos/aur/"$1"
 }
@@ -15,6 +17,7 @@ alias suspend="i3lock-fancy -pg -t '' && systemctl suspend"
 alias media="sudo mount -t hfsplus -o force,rw /dev/sdc2 /media/storagemount; sudo apfs-fuse -o allow_other /dev/nvme0n1p2 /media/rroche/macos"
 alias wifi="sudo systemctl restart netctl@idk2.service"
 function theme() {chgbckg "$1"}
+alias artwork="nohup kunst &"
 
 # function picker() {
 #     picker.sh "$1"
