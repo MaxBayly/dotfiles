@@ -1,0 +1,17 @@
+#!/bin/bash
+
+islight=$(python3 $HOME/repos/dotfiles/sunchecker.py 2>&1)
+
+
+if [ "$islight" = "1" ]; then
+echo "It's light outside."
+	filename=$(ls ~/Pictures/Light | shuf -n 1)
+elif [ "$islight" = "0" ]; then
+echo "It's dark outside."
+	filename=$(ls ~/Pictures/Dark | shuf -n 1)
+fi
+
+filename=$(echo $filename | cut -f1 -d".")
+
+chgbckg $filename
+

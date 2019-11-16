@@ -133,7 +133,7 @@ if [[ $(print -P "%#") =~ "#" ]]; then
     user_symbol = "#"
 fi
 POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="%{%B%F{black}%K{yellow}%} $user_symbol%{%b%f%k%F{yellow}%} %{%f%}"
-alias ls="la -lGah"
+alias l="la -lGah"
 source /home/rroche/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 #login scripts
 #sudo apfs-fuse -o allow_other /dev/nvme0n1p2 /media/rroche/macos

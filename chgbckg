@@ -1,3 +1,5 @@
 #!/bin/bash
+
 echo "Changing theme to $1..."
+
 feh -q --bg-fill ~/Pictures/"$1".jpg 2>/dev/null && picker $HOME/Pictures/"$1".jpg || (feh -q --bg-fill $HOME/Pictures/"$1".png && picker $HOME/Pictures/"$1".png)
