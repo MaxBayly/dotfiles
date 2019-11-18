@@ -1,3 +1,5 @@
+"""Deprecated in favour of sunup.py for extra accuracy"""
+
 import ephem
 import sys
 
@@ -7,9 +9,7 @@ s.compute(melb)
 twilight = -12 * ephem.degree
 
 light = s.alt>twilight
-# print("start python\nLight is: " + str(light))
-# print("end python\n")
-#sys.exit(light)
+
 
 if light:
 	sys.exit("1")
