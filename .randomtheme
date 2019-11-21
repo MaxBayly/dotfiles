@@ -1,9 +1,9 @@
 #!/bin/bash
 
+# call sunup.py to determine if the sun is up or not
 islight=$(python3 ~/repos/dotfiles/sunup.py 2>&1)
 
-echo "$islight"
-
+# if it is light, pick a random image from the light folder with shuf. Likewise for dark.
 if [ "$islight" = "1" ]; then
 echo "It's light outside."
 	filename=$(ls ~/Pictures/Light | shuf -n 1)
@@ -12,7 +12,9 @@ echo "It's dark outside."
 	filename=$(ls ~/Pictures/Dark | shuf -n 1)
 fi
 
+# trim away the file extension
 filename=$(echo $filename | cut -f1 -d".")
 
+# call the changebackground script
 chgbckg $filename
 
