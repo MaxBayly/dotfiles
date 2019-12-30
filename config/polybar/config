@@ -115,9 +115,9 @@ underline-color = ${color.bg}
 border-top-size = 0
 ;.69%
 border-color = {0,0,0};${color.ac}
-border-right-size = .39%
+border-right-size = 0%
 border-right-color = {0,0,0}
-border-left-size = .39%
+border-left-size = 0%
 border-left-color = {0,0,0}
 
 ; Number of spaces to add at the beginning/end of the bar
