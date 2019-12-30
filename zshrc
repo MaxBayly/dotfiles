@@ -18,6 +18,7 @@ alias media="sudo mount -t hfsplus -o force,rw /dev/sdc2 /media/storagemount; su
 alias wifi="sudo systemctl restart netctl@idk2.service"
 function theme() {chgbckg "$1"}
 alias artwork="nohup kunst &"
+alias dotfiles="cd ~/repos/dotfiles"
 
 # function picker() {
 #     picker.sh "$1"
