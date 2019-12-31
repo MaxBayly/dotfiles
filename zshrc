@@ -134,6 +134,8 @@ if [[ $(print -P "%#") =~ "#" ]]; then
     user_symbol = "#"
 fi
 POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="%{%B%F{black}%K{yellow}%} $user_symbol%{%b%f%k%F{yellow}%} %{%f%}"
+POWERLEVEL9K_VCS_MODIFIED_BACKGROUND='16'
+
 alias l="la -lGah"
 source /home/rroche/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 #login scripts
