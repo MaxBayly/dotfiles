@@ -31,4 +31,27 @@ def isLight():
 
     return light
 
-if 
+def getImageFilename(lightLevel):
+    filenameCommand = "ls ~/Pictures/" + lightLevel + " | shuf -n 1"
+    filename = subprocess.check_output(filenameCommand, shell=True)
+    path = lightLevel + filename
+    return path
+
+
+def setBackground(filename):
+    backgroundCommand = "feh -q --bg-fill ~/Pictures/" + path
+    subprocess.run(backgroundCommand)
+
+
+def main():
+    if isLight():
+        lightLevel = "light"
+    else:
+        lightLevel = "dark"
+    echoLightLevel = "It's " + lightLevel + " outside."
+    subprocess.run(echoLightLevel)
+    path = getImageFilename(lightLevel)
+    setBackground(path)
+    
+
+    
