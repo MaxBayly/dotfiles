@@ -5,7 +5,12 @@ from skyfield import almanac
 from datetime import timedelta
 from skyfield.api import utc, Loader
 import datetime
+from colorthief import ColorThief as cf
 
+COLOUR_COUNT = 6
+NCMPCPP_MAIN = "color3"
+NCMPCPP_HEADINGS = "color11"
+NCMPCPP_ELAPSED = "color21"
 
 def isLight():
     # load in data directory to avoid redownloading
@@ -33,14 +38,63 @@ def isLight():
 
 def getImageFilename(lightLevel):
     filenameCommand = "ls ~/Pictures/" + lightLevel + " | shuf -n 1"
-    filename = subprocess.check_output(filenameCommand, shell=True)
-    path = lightLevel + filename
-    return path
+    filename = str(subprocess.check_output(filenameCommand, shell=True))
+    filename = filename[2:]
+    filename = filename[:-3]
+    imagePath = lightLevel + "/" + str(filename)
+    return imagePath, filename
 
 
-def setBackground(filename):
-    backgroundCommand = "feh -q --bg-fill ~/Pictures/" + path
-    subprocess.run(backgroundCommand)
+def setBackground(imagePath):
+    backgroundCommand = "feh -q --bg-fill ~/Pictures/" + imagePath
+    subprocess.run(backgroundCommand, shell=True)
+
+def getPalette(imagePath):
+    fullImagePath = "/home/rroche/Pictures/" + imagePath
+    colourThief = cf(fullImagePath)
+    colourHexes = []
+    palette = colourThief.get_palette(color_count=COLOUR_COUNT)
+    for colour in palette:
+	    colourHexes.append('#%02x%02x%02x' % colour)
+    return colourHexes
+
+def writeConfigs(colourHexes):
+    sedGlava = 'sed -i "s/#define COLOR.*/#define COLOR mix(' + colourHexes[4] + ', ' + colourHexes[1] + ', clamp(d\/80, 0, 1))/g" ' + '$HOME/.config/glava/radial.glsl'
+    sedPolybar = 'sed -i "s/under = .*/under = ' + colourHexes[5] + '/g" ' + '$HOME/.config/polybar/colors.ini'
+    sedNcmpcppMain = 'sed -i "s/' + NCMPCPP_MAIN + ' = .*/' + NCMPCPP_MAIN + ' = ' + colourHexes[5] + '/g" ' + "$HOME/.config/termite/config"
+    sedNcmpcppHeadings = 'sed -i "s/' + NCMPCPP_HEADINGS + ' = .*/' + NCMPCPP_HEADINGS + ' = ' + colourHexes[2] + '/g" ' + "$HOME/.config/termite/config"
+    
+    subprocess.run(sedGlava, shell=True)
+    subprocess.run(sedPolybar, shell=True)
+    subprocess.run(sedNcmpcppMain, shell=True)
+    subprocess.run(sedNcmpcppHeadings, shell=True)
+
+def glavaRunning():
+    try:
+        pid = str(subprocess.check_output("pgrep glava", shell=True))
+        pid = pid[2:]
+        pid = pid[:-3]
+        pid = int(pid)
+        return pid
+    except:
+        return 0
+
+def relaunchGlava(glavaPID):
+    if glavaPID:
+        print("Relaunching glava...")
+        killString = "kill -9 " + str(glavaPID)
+        subprocess.run(killString, shell=True)
+        subprocess.run("exec glava &", shell=True)
+        print("Done!")
+    else:
+        pass
+
+def relaunchPolybar():
+    print("Relaunching polybar...")
+    subprocess.run("pkill polybar", shell=True)
+    subprocess.run("$HOME/.config/polybar/launch.sh 2>/dev/null", shell=True)
+    print("Done!")
+
 
 
 def main():
@@ -48,10 +102,22 @@ def main():
         lightLevel = "light"
     else:
         lightLevel = "dark"
-    echoLightLevel = "It's " + lightLevel + " outside."
-    subprocess.run(echoLightLevel)
-    path = getImageFilename(lightLevel)
-    setBackground(path)
-    
+    print("It's", lightLevel, "outside")
+    imagePath, filename = getImageFilename(lightLevel)
+    theme = filename[:-4]
+    print("Changing theme to", theme, "...")
+    setBackground(imagePath)
+    colourHexes = getPalette(imagePath)
+    writeConfigs(colourHexes)
+    print("Reloading termite...")
+    subprocess.run("killall -USR1 termite", shell=True)
+    print("Done!")
+    glavaPID = glavaRunning()
+    relaunchGlava(glavaPID)
+    relaunchPolybar()
+
+
+
+main()
 
     
