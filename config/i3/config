@@ -218,7 +218,7 @@ default_border none
 exec --no-startup-id nitrogen --restore; sleep 1
 
 # Launch rofi
-bindsym $mod+space exec --no-startup-id "rofi -show run"
+bindsym $mod+space exec --no-startup-id "rofi -show run -modi run,window -show-icons"
 
 # Media player controls
 bindsym XF86AudioMute exec amixer sset 'Master' toggle
