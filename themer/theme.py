@@ -12,6 +12,28 @@ NCMPCPP_MAIN = "color3"
 NCMPCPP_HEADINGS = "color11"
 NCMPCPP_ELAPSED = "color21"
 
+NCMPCPP_MAIN_COLOUR_INDEX = 0
+
+def main():
+    if isLight():
+        lightLevel = "light"
+    else:
+        lightLevel = "dark"
+    print("It's", lightLevel, "outside")
+    imagePath, filename = getImageFilename(lightLevel)
+    theme = filename[:-4]
+    print("Changing theme to", theme, "...")
+    setBackground(imagePath)
+    colourHexes = getPalette(imagePath)
+    colourHexes[NCMPCPP_MAIN_COLOUR_INDEX] = getContrastColours(colourHexes)
+    writeConfigs(colourHexes)
+    print("Reloading termite...")
+    subprocess.run("killall -USR1 termite", shell=True)
+    print("Done!")
+    glavaPID = glavaRunning()
+    relaunchGlava(glavaPID)
+    relaunchPolybar()
+
 def isLight():
     # load in data directory to avoid redownloading
     loader = Loader('~/skyfield_data')
@@ -61,7 +83,7 @@ def getPalette(imagePath):
 def writeConfigs(colourHexes):
     sedGlava = 'sed -i "s/#define COLOR.*/#define COLOR mix(' + colourHexes[4] + ', ' + colourHexes[1] + ', clamp(d\/80, 0, 1))/g" ' + '$HOME/.config/glava/radial.glsl'
     sedPolybar = 'sed -i "s/under = .*/under = ' + colourHexes[5] + '/g" ' + '$HOME/.config/polybar/colors.ini'
-    sedNcmpcppMain = 'sed -i "s/' + NCMPCPP_MAIN + ' = .*/' + NCMPCPP_MAIN + ' = ' + colourHexes[5] + '/g" ' + "$HOME/.config/termite/config"
+    sedNcmpcppMain = 'sed -i "s/' + NCMPCPP_MAIN + ' = .*/' + NCMPCPP_MAIN + ' = ' + colourHexes[NCMPCPP_MAIN_COLOUR_INDEX] + '/g" ' + "$HOME/.config/termite/config"
     sedNcmpcppHeadings = 'sed -i "s/' + NCMPCPP_HEADINGS + ' = .*/' + NCMPCPP_HEADINGS + ' = ' + colourHexes[2] + '/g" ' + "$HOME/.config/termite/config"
     
     subprocess.run(sedGlava, shell=True)
@@ -95,29 +117,33 @@ def relaunchPolybar():
     subprocess.run("$HOME/.config/polybar/launch.sh 2>/dev/null", shell=True)
     print("Done!")
 
-
-
-def main():
-    if isLight():
-        lightLevel = "light"
+def getContrastColours(colourHexes):
+    hexValue = colourHexes[NCMPCPP_MAIN_COLOUR_INDEX].lstrip('#')
+    rgbValue = list(int(hexValue[i:i+2], 16) for i in (0,2, 4))
+    brightness =getBrightnessFromRgb(rgbValue)
+    difference = 128 - brightness
+    
+    if difference > 0:
+        print("Colour 0 is too dark for terminal text. Brightening...")
+        rgbBrightened = []
+        for value in rgbValue:
+            rgbBrightened.append(round(value * 128/brightness))
+        newBrightness = getBrightnessFromRgb(rgbBrightened)
+        rgbBrightened = tuple(rgbBrightened)
+        hexBrightened = '#%02x%02x%02x' % rgbBrightened
+        print("Done! New hex: ", hexBrightened)
+        return hexBrightened
     else:
-        lightLevel = "dark"
-    print("It's", lightLevel, "outside")
-    imagePath, filename = getImageFilename(lightLevel)
-    theme = filename[:-4]
-    print("Changing theme to", theme, "...")
-    setBackground(imagePath)
-    colourHexes = getPalette(imagePath)
-    writeConfigs(colourHexes)
-    print("Reloading termite...")
-    subprocess.run("killall -USR1 termite", shell=True)
-    print("Done!")
-    glavaPID = glavaRunning()
-    relaunchGlava(glavaPID)
-    relaunchPolybar()
+        return colourHexes[NCMPCPP_MAIN_COLOUR_INDEX]
 
+
+
+def getBrightnessFromRgb(rgbValues):
+    brightness = (rgbValues[0] * 299 + rgbValues[1] * 587 + rgbValues[2] * 114) / 1000
+    return brightness
 
 
 main()
+
 
     
