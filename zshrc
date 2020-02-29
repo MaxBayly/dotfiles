@@ -19,6 +19,9 @@ alias wifi="sudo systemctl restart netctl@idk2.service"
 function theme() {chgbckg "$1"}
 alias artwork="nohup kunst &"
 alias dotfiles="cd ~/repos/dotfiles"
+function movemusic() {
+    scp -r -i ~/.ssh/server_rsa "/mass/medix/Music/""$1"" rroche@192.168.0.40:"/srv/funkwhale/data/music/""$1""
+}
 
 # function picker() {
 #     picker.sh "$1"

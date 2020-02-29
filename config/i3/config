@@ -208,6 +208,13 @@ for_window [class="Kmix"] floating enable; border none
 for_window [class="Klipper"] floating enable; border none
 for_window [class="Plasmoidviewer"] floating enable; border none
 
+# force tiling
+for_window [class="dolphin"] floating disable
+for_window [class="qbittorrent"] floating disable
+for_window [class="kdeconnect-settings"] floating disable
+
+
+
 # (No) Title Bars
 #for_window [class="^.*"] border pixel 0
 for_window [class="^.*"] border none
@@ -218,7 +225,7 @@ default_border none
 exec --no-startup-id nitrogen --restore; sleep 1
 
 # Launch rofi
-bindsym $mod+space exec --no-startup-id "rofi -show run -modi run,window -show-icons"
+bindsym $mod+space exec --no-startup-id "rofi -show run -modi run,window,calc -show-icons"
 
 # Media player controls
 bindsym XF86AudioMute exec amixer sset 'Master' toggle
