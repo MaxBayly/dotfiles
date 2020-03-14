@@ -35,6 +35,7 @@ def main():
     relaunchPolybar()
 
 def isLight():
+    """isLight returns True if the sun is up and False otherwise"""
     # load in data directory to avoid redownloading
     loader = Loader('~/skyfield_data')
     ts = loader.timescale()
@@ -59,8 +60,10 @@ def isLight():
     return light
 
 def getImageFilename(lightLevel):
-    filenameCommand = "ls ~/Pictures/" + lightLevel + " | shuf -n 1"
+    """Returns the image path and name"""
+    filenameCommand = "ls ~/Pictures/" + lightLevel + " | shuf -n 1" #construct shell command. Finds the folder relevant to light level, then shuffles the ls result
     filename = str(subprocess.check_output(filenameCommand, shell=True))
+    # crop name into useful string
     filename = filename[2:]
     filename = filename[:-3]
     imagePath = lightLevel + "/" + str(filename)
@@ -68,19 +71,23 @@ def getImageFilename(lightLevel):
 
 
 def setBackground(imagePath):
+    """Uses feh to set the background to the passed image"""
     backgroundCommand = "feh -q --bg-fill ~/Pictures/" + imagePath
     subprocess.run(backgroundCommand, shell=True)
 
 def getPalette(imagePath):
+    """Constructs a palette of hexes based on the selected image"""
     fullImagePath = "/home/rroche/Pictures/" + imagePath
     colourThief = cf(fullImagePath)
     colourHexes = []
     palette = colourThief.get_palette(color_count=COLOUR_COUNT)
     for colour in palette:
-	    colourHexes.append('#%02x%02x%02x' % colour)
+	    colourHexes.append('#%02x%02x%02x' % colour) # format for hex
     return colourHexes
 
 def writeConfigs(colourHexes):
+    """sed the selected colours into the relevant config files"""
+    # construct sed commands
     sedGlava = 'sed -i "s/#define COLOR.*/#define COLOR mix(' + colourHexes[4] + ', ' + colourHexes[1] + ', clamp(d\/80, 0, 1))/g" ' + '$HOME/.config/glava/radial.glsl'
     sedPolybar = 'sed -i "s/under = .*/under = ' + colourHexes[5] + '/g" ' + '$HOME/.config/polybar/colors.ini'
     sedNcmpcppMain = 'sed -i "s/' + NCMPCPP_MAIN + ' = .*/' + NCMPCPP_MAIN + ' = ' + colourHexes[NCMPCPP_MAIN_COLOUR_INDEX] + '/g" ' + "$HOME/.config/termite/config"
@@ -92,6 +99,7 @@ def writeConfigs(colourHexes):
     subprocess.run(sedNcmpcppHeadings, shell=True)
 
 def glavaRunning():
+    """Return pid if glava is running, 0 otherwise"""
     try:
         pid = str(subprocess.check_output("pgrep glava", shell=True))
         pid = pid[2:]
@@ -102,6 +110,7 @@ def glavaRunning():
         return 0
 
 def relaunchGlava(glavaPID):
+    """Relaunch glava so the configs are reloaded"""
     if glavaPID:
         print("Relaunching glava...")
         killString = "kill -9 " + str(glavaPID)
@@ -112,14 +121,16 @@ def relaunchGlava(glavaPID):
         pass
 
 def relaunchPolybar():
+    """Relaunch polybar so the configs are reloaded"""
     print("Relaunching polybar...")
     subprocess.run("pkill polybar", shell=True)
     subprocess.run("$HOME/.config/polybar/launch.sh 2>/dev/null", shell=True)
     print("Done!")
 
 def getContrastColours(colourHexes):
+    """Analyse text colours. If they're too dark for good viewing, brighten them"""
     hexValue = colourHexes[NCMPCPP_MAIN_COLOUR_INDEX].lstrip('#')
-    rgbValue = list(int(hexValue[i:i+2], 16) for i in (0,2, 4))
+    rgbValue = list(int(hexValue[i:i+2], 16) for i in (0,2, 4)) # convert to rgb for analysis
     brightness =getBrightnessFromRgb(rgbValue)
     difference = 128 - brightness
     
@@ -139,6 +150,7 @@ def getContrastColours(colourHexes):
 
 
 def getBrightnessFromRgb(rgbValues):
+    """Calculates colour brightness based on rgb values"""
     brightness = (rgbValues[0] * 299 + rgbValues[1] * 587 + rgbValues[2] * 114) / 1000
     return brightness
 
