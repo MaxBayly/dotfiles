@@ -1,7 +1,7 @@
 #~/.screenlayout/custom.sh
 export PATH=$PATH:/home/rroche/repos/dotfiles/
-export KUNST_MUSIC_DIR=/store/medix/Music/
-export KUNST_SIZE="1000x1000"
+export KUNST_MUSIC_DIR=/mass/medix/Music/
+export KUNST_SIZE="500x500"
 alias plex="sudo systemctl start plexmediaserver.service; chromium --new-window http://192.168.0.40:32400/web/index.html# &"
 #; sudo chmod 777 /run/media/rroche" sudo apfs-fuse -o allow_other /dev/nvme0n1p2 /media/rroche/macos; sudo mount -t hfsplus -o force,rw /dev/sdc2 /media/storagemount; 
 function aur() {
@@ -19,9 +19,7 @@ alias wifi="sudo systemctl restart netctl@idk2.service"
 function theme() {chgbckg "$1"}
 alias artwork="nohup kunst &"
 alias dotfiles="cd ~/repos/dotfiles"
-function movemusic() {
-    scp -r -i ~/.ssh/server_rsa "/mass/medix/Music/""$1"" rroche@192.168.0.40:"/srv/funkwhale/data/music/""$1""
-}
+
 
 # function picker() {
 #     picker.sh "$1"
