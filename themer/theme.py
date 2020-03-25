@@ -92,11 +92,14 @@ def writeConfigs(colourHexes):
     sedPolybar = 'sed -i "s/under = .*/under = ' + colourHexes[5] + '/g" ' + '$HOME/.config/polybar/colors.ini'
     sedNcmpcppMain = 'sed -i "s/' + NCMPCPP_MAIN + ' = .*/' + NCMPCPP_MAIN + ' = ' + colourHexes[NCMPCPP_MAIN_COLOUR_INDEX] + '/g" ' + "$HOME/.config/termite/config"
     sedNcmpcppHeadings = 'sed -i "s/' + NCMPCPP_HEADINGS + ' = .*/' + NCMPCPP_HEADINGS + ' = ' + colourHexes[2] + '/g" ' + "$HOME/.config/termite/config"
-    
+    sedPolybari3 = 'sed -i "s/i3colour = .*/i3colour = ' + colourHexes[3] + '/g" ' + '$HOME/.config/polybar/colors.ini'
+
+
     subprocess.run(sedGlava, shell=True)
     subprocess.run(sedPolybar, shell=True)
     subprocess.run(sedNcmpcppMain, shell=True)
     subprocess.run(sedNcmpcppHeadings, shell=True)
+    subprocess.run(sedPolybari3, shell=True)
 
 def glavaRunning():
     """Return pid if glava is running, 0 otherwise"""
