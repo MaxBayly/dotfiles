@@ -184,7 +184,7 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 
 # Gaps
-gaps inner 10
+gaps inner 5
 gaps outer 0
 smart_gaps on
 
@@ -242,6 +242,7 @@ exec --no-startup-id nitrogen --restore; sleep 1
 # Launch rofi
 bindsym $mod+space exec --no-startup-id "rofi -show run -modi run,window,calc -show-icons -width 1500 -eh 2 -lines 5 -font 'mono 16'"
 bindsym Control+space exec --no-startup-id "rofi -show window -modi run,window,calc -show-icons -width 1500 -eh 2 -lines 5 -font 'mono 16'"
+bindsym $mod+Home exec "code $HOME/repos/dotfiles" #shortcut for opening dotfiles in vscode
 
 
 # Media player controls
