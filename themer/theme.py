@@ -169,4 +169,3 @@ def getBrightnessFromRgb(rgbValues):
 main()
 
 
-#print(getBrightnessFromRgb([29, 40, 82]))
