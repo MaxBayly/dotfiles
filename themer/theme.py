@@ -140,6 +140,14 @@ def getContrastColours(colourHexes):
     if difference > 0:
         print("Colour 0 is too dark for terminal text. Brightening...")
         rgbBrightened = []
+        for colour in colourHexes:
+            colourStripped = colour.lstrip('#')
+            rgb = list(int(colourStripped[i:i+2], 16) for i in (0,2, 4))
+            altBrightness = getBrightnessFromRgb(rgb)
+            difference = 128-altBrightness
+            if difference <= 0:
+                print("Done! Using alternate palette hex:", colour)
+                return colour
         for value in rgbValue:
             rgbBrightened.append(round(value * 128/brightness))
         newBrightness = getBrightnessFromRgb(rgbBrightened)
@@ -161,4 +169,4 @@ def getBrightnessFromRgb(rgbValues):
 main()
 
 
-    
+#print(getBrightnessFromRgb([29, 40, 82]))
