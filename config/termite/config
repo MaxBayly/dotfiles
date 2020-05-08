@@ -55,7 +55,7 @@ foreground = #fff
 background = rgba(35, 38, 39, 0.8)
 
 # If unset, will reverse foreground and background
-highlight = #fff
+#highlight = #a788cf
 
 # Colors from color0 to color254 can be set
 # black text
