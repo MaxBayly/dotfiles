@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# simply creates a new i3 workspace with the name that is passed in
+i3-msg workspace $1
