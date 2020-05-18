@@ -89,7 +89,7 @@ def writeConfigs(colourHexes):
     """sed the selected colours into the relevant config files"""
     # construct sed commands
   
-    sedGlava = 'sed -i "s/#define COLOR.*/#define COLOR mix(' + colourHexes[4] + ', ' + colourHexes[1] + ', clamp(d\/80, 0, 1))/g" ' + '$HOME/.config/glava/radial.glsl'
+    sedGlava = 'sed -i "s/#define COLOR.*/#define COLOR mix(' + colourHexes[1] + ', ' + colourHexes[4] + ', clamp(d\/80, 0, 1))/g" ' + '$HOME/.config/glava/radial.glsl'
     sedPolybar = 'sed -i "s/under = .*/under = ' + colourHexes[5] + '/g" ' + '$HOME/.config/polybar/colors.ini'
     sedNcmpcppMain = 'sed -i "s/' + NCMPCPP_MAIN + ' = .*/' + NCMPCPP_MAIN + ' = ' + colourHexes[NCMPCPP_MAIN_COLOUR_INDEX] + '/g" ' + "$HOME/.config/termite/config"
     sedNcmpcppHeadings = 'sed -i "s/' + NCMPCPP_HEADINGS + ' = .*/' + NCMPCPP_HEADINGS + ' = ' + colourHexes[2] + '/g" ' + "$HOME/.config/termite/config"
