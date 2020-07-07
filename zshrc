@@ -19,6 +19,7 @@ alias wifi="sudo systemctl restart netctl@idk2.service"
 function theme() {chgbckg "$1"}
 alias artwork="nohup kunst &"
 alias dotfiles="cd ~/repos/dotfiles"
+alias polyrestart="pkill polybar && ~/repos/dotfiles/config/polybar/launch.sh"
 
 
 # function picker() {
@@ -142,3 +143,6 @@ source /home/rroche/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 #login scripts
 #sudo apfs-fuse -o allow_other /dev/nvme0n1p2 /media/rroche/macos
 #systemctl start plexmediaserver.service
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
