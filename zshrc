@@ -20,7 +20,7 @@ function theme() {chgbckg "$1"}
 alias artwork="nohup kunst &"
 alias dotfiles="cd ~/repos/dotfiles"
 alias polyrestart="pkill polybar && ~/repos/dotfiles/config/polybar/launch.sh"
-
+alias notes="code ~/repos/foam-notes"
 
 # function picker() {
 #     picker.sh "$1"
