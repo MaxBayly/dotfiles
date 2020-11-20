@@ -272,6 +272,7 @@ bindsym $mod+period exec "mpc next"
 bindsym $mod+comma exec "mpc prev"
 bindsym $mod+g exec pavucontrol
 bindsym Mod1+Tab workspace back_and_forth
+bindsym Control+$mod+space exec polybar-msg cmd toggle
 
 bindsym Control+Shift+Escape scratchpad show
 #bindcode 121 exec chromium
