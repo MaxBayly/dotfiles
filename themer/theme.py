@@ -88,14 +88,26 @@ def getPalette(imagePath):
 def writeConfigs(colourHexes):
     """sed the selected colours into the relevant config files"""
     # construct sed commands
+
+    hexValue = colourHexes[2].lstrip('#')
+    rgbValue = list(int(hexValue[i:i+2], 16) for i in (0,2, 4)) # convert to rgb for analysis
+    brightness =getBrightnessFromRgb(rgbValue)
+    #print("Brightness is " + str(brightness))
+    if brightness > 128:
+        textcolour = "#333333"
+    else:
+        textcolour = "#FFFFFF"
+
   
     sedGlava = 'sed -i "s/#define COLOR.*/#define COLOR mix(' + colourHexes[1] + ', ' + colourHexes[4] + ', clamp(d\/80, 0, 1))/g" ' + '$HOME/.config/glava/radial.glsl'
     sedPolybar = 'sed -i "s/under = .*/under = ' + colourHexes[5] + '/g" ' + '$HOME/.config/polybar/colors.ini'
+    sedPolybarBackground = 'sed -i "s/mf = .*/mf = ' + colourHexes[2] + '/g" ' + '$HOME/.config/polybar/colors.ini'
+    sedPolybarForeground = 'sed -i "s/light-mode-font = .*/light-mode-font = ' + textcolour + '/g" ' + '$HOME/.config/polybar/colors.ini'
     sedNcmpcppMain = 'sed -i "s/' + NCMPCPP_MAIN + ' = .*/' + NCMPCPP_MAIN + ' = ' + colourHexes[NCMPCPP_MAIN_COLOUR_INDEX] + '/g" ' + "$HOME/.config/termite/config"
     sedNcmpcppHeadings = 'sed -i "s/' + NCMPCPP_HEADINGS + ' = .*/' + NCMPCPP_HEADINGS + ' = ' + colourHexes[2] + '/g" ' + "$HOME/.config/termite/config"
     sedPolybari3 = 'sed -i "s/i3colour = .*/i3colour = ' + colourHexes[3] + '/g" ' + '$HOME/.config/polybar/colors.ini'
 
-    commands = [sedGlava, sedPolybar, sedNcmpcppHeadings, sedNcmpcppMain, sedPolybari3]
+    commands = [sedGlava, sedPolybar, sedNcmpcppHeadings, sedNcmpcppMain, sedPolybari3, sedPolybarBackground, sedPolybarForeground]
 
     for command in commands:
         subprocess.run(command, shell=True)
