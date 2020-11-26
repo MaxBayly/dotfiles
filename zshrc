@@ -94,6 +94,7 @@ export LS_COLORS
 plugins=(
 git
 zsh-autosuggestions
+zsh-syntax-highlighting
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -139,7 +140,7 @@ POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="%{%B%F{black}%K{yellow}%} $user_symbo
 POWERLEVEL9K_VCS_MODIFIED_BACKGROUND='16'
 
 alias l="la -lGah"
-source /home/rroche/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+#source /home/rroche/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
 #login scripts
 #sudo apfs-fuse -o allow_other /dev/nvme0n1p2 /media/rroche/macos
 #systemctl start plexmediaserver.service
