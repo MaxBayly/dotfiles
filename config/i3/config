@@ -254,7 +254,8 @@ default_border none
 exec --no-startup-id nitrogen --restore; sleep 1
 
 # Launch rofi
-bindsym $mod+space exec --no-startup-id "rofi -show run -modi run,window,calc -show-icons -width 1500 -eh 2 -lines 5 -font 'mono 16'"
+bindsym $mod+space exec --no-startup-id "rofi -show run -modi run,window,calc -show-icons -font 'mono 16'" 
+#-width 1500 -eh 2 -lines 5 
 bindsym Control+space exec --no-startup-id "rofi -show window -modi run,window,calc -show-icons -width 1500 -eh 2 -lines 5 -font 'mono 16'"
 #shortcut for opening dotfiles in vscode
 bindsym $mod+Home exec "code $HOME/repos/dotfiles" 
@@ -273,6 +274,10 @@ bindsym Pause exec "mpc toggle"
 bindsym $mod+period exec "mpc next"
 bindsym $mod+comma exec "mpc prev"
 bindsym $mod+g exec pavucontrol
+bindsym $mod+Pause exec amixer sset 'Master' 5%+
+bindsym $mod+Scroll_Lock exec amixer sset 'Master' 5%-
+
+# other productivity controls
 bindsym Mod1+Tab workspace back_and_forth
 bindsym Control+$mod+space exec polybar-msg cmd toggle
 
