@@ -14,28 +14,31 @@ NCMPCPP_ELAPSED = "color21"
 
 NCMPCPP_MAIN_COLOUR_INDEX = 0
 
-def main():
-    if isLight():
-        lightLevel = "light"
-    else:
-        lightLevel = "dark"
-    print("It's", lightLevel, "outside")
-    imagePath, filename = getImageFilename(lightLevel)
-    theme = filename[:-4]
+def main(theme=None, image_path=None):
+    if theme is None:
+        if is_light():
+            light_level = "light"
+        else:
+            light_level = "dark"
+        print("It's", light_level, "outside")
+        image_path, filename = get_random_image_filename(light_level)
+        theme = filename[:-4]
+
     print("Changing theme to", theme, "...")
-    setBackground(imagePath)
-    colourHexes = getPalette(imagePath)
-    colourHexes[NCMPCPP_MAIN_COLOUR_INDEX] = getContrastColours(colourHexes)
-    writeConfigs(colourHexes)
+    set_background(image_path)
+    colour_hexes = get_palette(image_path)
+    colour_hexes[NCMPCPP_MAIN_COLOUR_INDEX] = get_contrast_colours(colour_hexes)
+    write_configs(colour_hexes)
     print("Reloading termite...")
     subprocess.run("killall -USR1 termite", shell=True)
     print("Done!")
-    glavaPID = glavaRunning()
-    relaunchGlava(glavaPID)
-    relaunchPolybar()
+    glavaPID = glava_running()
+    relaunch_glava(glavaPID)
+    relaunch_polybar()
+    exit(0)
 
-def isLight():
-    """isLight returns True if the sun is up and False otherwise"""
+def is_light():
+    """is_light returns True if the sun is up and False otherwise"""
     # load in data directory to avoid redownloading
     loader = Loader('~/skyfield_data')
     ts = loader.timescale()
@@ -59,39 +62,39 @@ def isLight():
 
     return light
 
-def getImageFilename(lightLevel):
+def get_random_image_filename(light_level):
     """Returns the image path and name"""
-    filenameCommand = "ls ~/Pictures/" + lightLevel + " | shuf -n 1" #construct shell command. Finds the folder relevant to light level, then shuffles the ls result
+    filenameCommand = "ls ~/Pictures/" + light_level + " | shuf -n 1" #construct shell command. Finds the folder relevant to light level, then shuffles the ls result
     filename = str(subprocess.check_output(filenameCommand, shell=True))
     # crop name into useful string
     filename = filename[2:]
     filename = filename[:-3]
-    imagePath = lightLevel + "/" + str(filename)
-    return imagePath, filename
+    image_path = light_level + "/" + str(filename)
+    return image_path, filename
 
 
-def setBackground(imagePath):
+def set_background(image_path):
     """Uses feh to set the background to the passed image"""
-    backgroundCommand = "feh -q --bg-fill ~/Pictures/" + imagePath
+    backgroundCommand = "feh -q --bg-fill ~/Pictures/" + image_path
     subprocess.run(backgroundCommand, shell=True)
 
-def getPalette(imagePath):
+def get_palette(image_path):
     """Constructs a palette of hexes based on the selected image"""
-    fullImagePath = "/home/rroche/Pictures/" + imagePath
-    colourThief = cf(fullImagePath)
-    colourHexes = []
+    fullimage_path = "/home/rroche/Pictures/" + image_path
+    colourThief = cf(fullimage_path)
+    colour_hexes = []
     palette = colourThief.get_palette(color_count=COLOUR_COUNT)
     for colour in palette:
-	    colourHexes.append('#%02x%02x%02x' % colour) # format for hex
-    return colourHexes
+	    colour_hexes.append('#%02x%02x%02x' % colour) # format for hex
+    return colour_hexes
 
-def writeConfigs(colourHexes):
+def write_configs(colour_hexes):
     """sed the selected colours into the relevant config files"""
     # construct sed commands
 
-    hexValue = colourHexes[2].lstrip('#')
+    hexValue = colour_hexes[2].lstrip('#')
     rgbValue = list(int(hexValue[i:i+2], 16) for i in (0,2, 4)) # convert to rgb for analysis
-    brightness =getBrightnessFromRgb(rgbValue)
+    brightness =get_brightness_from_rgb(rgbValue)
     #print("Brightness is " + str(brightness))
     if brightness > 128:
         textcolour = "#333333"
@@ -99,13 +102,13 @@ def writeConfigs(colourHexes):
         textcolour = "#FFFFFF"
 
   
-    sedGlava = 'sed -i "s/#define COLOR.*/#define COLOR mix(' + colourHexes[1] + ', ' + colourHexes[4] + ', clamp(d\/80, 0, 1))/g" ' + '$HOME/.config/glava/radial.glsl'
-    sedPolybar = 'sed -i "s/under = .*/under = ' + colourHexes[5] + '/g" ' + '$HOME/.config/polybar/colors.ini'
-    sedPolybarBackground = 'sed -i "s/mf = .*/mf = ' + colourHexes[2] + '/g" ' + '$HOME/.config/polybar/colors.ini'
+    sedGlava = 'sed -i "s/#define COLOR.*/#define COLOR mix(' + colour_hexes[1] + ', ' + colour_hexes[4] + ', clamp(d\/80, 0, 1))/g" ' + '$HOME/.config/glava/radial.glsl'
+    sedPolybar = 'sed -i "s/under = .*/under = ' + colour_hexes[5] + '/g" ' + '$HOME/.config/polybar/colors.ini'
+    sedPolybarBackground = 'sed -i "s/mf = .*/mf = ' + colour_hexes[2] + '/g" ' + '$HOME/.config/polybar/colors.ini'
     sedPolybarForeground = 'sed -i "s/light-mode-font = .*/light-mode-font = ' + textcolour + '/g" ' + '$HOME/.config/polybar/colors.ini'
-    sedNcmpcppMain = 'sed -i "s/' + NCMPCPP_MAIN + ' = .*/' + NCMPCPP_MAIN + ' = ' + colourHexes[NCMPCPP_MAIN_COLOUR_INDEX] + '/g" ' + "$HOME/.config/termite/config"
-    sedNcmpcppHeadings = 'sed -i "s/' + NCMPCPP_HEADINGS + ' = .*/' + NCMPCPP_HEADINGS + ' = ' + colourHexes[2] + '/g" ' + "$HOME/.config/termite/config"
-    sedPolybari3 = 'sed -i "s/i3colour = .*/i3colour = ' + colourHexes[3] + '/g" ' + '$HOME/.config/polybar/colors.ini'
+    sedNcmpcppMain = 'sed -i "s/' + NCMPCPP_MAIN + ' = .*/' + NCMPCPP_MAIN + ' = ' + colour_hexes[NCMPCPP_MAIN_COLOUR_INDEX] + '/g" ' + "$HOME/.config/termite/config"
+    sedNcmpcppHeadings = 'sed -i "s/' + NCMPCPP_HEADINGS + ' = .*/' + NCMPCPP_HEADINGS + ' = ' + colour_hexes[2] + '/g" ' + "$HOME/.config/termite/config"
+    sedPolybari3 = 'sed -i "s/i3colour = .*/i3colour = ' + colour_hexes[3] + '/g" ' + '$HOME/.config/polybar/colors.ini'
 
     commands = [sedGlava, sedPolybar, sedNcmpcppHeadings, sedNcmpcppMain, sedPolybari3, sedPolybarBackground, sedPolybarForeground]
 
@@ -113,7 +116,7 @@ def writeConfigs(colourHexes):
         subprocess.run(command, shell=True)
    
 
-def glavaRunning():
+def glava_running():
     """Return pid if glava is running, 0 otherwise"""
     try:
         pid = str(subprocess.check_output("pgrep glava", shell=True))
@@ -124,7 +127,7 @@ def glavaRunning():
     except:
         return 0
 
-def relaunchGlava(glavaPID):
+def relaunch_glava(glavaPID):
     """Relaunch glava so the configs are reloaded"""
     if glavaPID:
         print("Relaunching glava...")
@@ -135,49 +138,92 @@ def relaunchGlava(glavaPID):
     else:
         pass
 
-def relaunchPolybar():
+def relaunch_polybar():
     """Relaunch polybar so the configs are reloaded"""
     print("Relaunching polybar...")
     subprocess.run("pkill polybar", shell=True)
     subprocess.run("$HOME/.config/polybar/launch.sh 2>/dev/null", shell=True)
     print("Done!")
 
-def getContrastColours(colourHexes):
+def get_contrast_colours(colour_hexes):
     """Analyse text colours. If they're too dark for good viewing, brighten them"""
-    hexValue = colourHexes[NCMPCPP_MAIN_COLOUR_INDEX].lstrip('#')
+    hexValue = colour_hexes[NCMPCPP_MAIN_COLOUR_INDEX].lstrip('#')
     rgbValue = list(int(hexValue[i:i+2], 16) for i in (0,2, 4)) # convert to rgb for analysis
-    brightness =getBrightnessFromRgb(rgbValue)
+    brightness =get_brightness_from_rgb(rgbValue)
     difference = 128 - brightness
     
     if difference > 0:
         print("Colour 0 is too dark for terminal text. Brightening...")
         rgbBrightened = []
-        for colour in colourHexes:
+        for colour in colour_hexes:
             colourStripped = colour.lstrip('#')
             rgb = list(int(colourStripped[i:i+2], 16) for i in (0,2, 4))
-            altBrightness = getBrightnessFromRgb(rgb)
+            altBrightness = get_brightness_from_rgb(rgb)
             difference = 128-altBrightness
             if difference <= 0:
                 print("Done! Using alternate palette hex:", colour)
                 return colour
         for value in rgbValue:
             rgbBrightened.append(round(value * 128/brightness))
-        newBrightness = getBrightnessFromRgb(rgbBrightened)
+        newBrightness = get_brightness_from_rgb(rgbBrightened)
         rgbBrightened = tuple(rgbBrightened)
         hexBrightened = '#%02x%02x%02x' % rgbBrightened
         print("Done! New hex: ", hexBrightened)
         return hexBrightened
     else:
-        return colourHexes[NCMPCPP_MAIN_COLOUR_INDEX]
+        return colour_hexes[NCMPCPP_MAIN_COLOUR_INDEX]
 
-
-
-def getBrightnessFromRgb(rgbValues):
+def get_brightness_from_rgb(rgbValues):
     """Calculates colour brightness based on rgb values"""
     brightness = (rgbValues[0] * 299 + rgbValues[1] * 587 + rgbValues[2] * 114) / 1000
     return brightness
 
+def list_themes():
+    print("\033[95mLight themes:\033[0m")
+    filenameCommand = "ls ~/Pictures/light"
+    filenames = subprocess.check_output(filenameCommand, shell=True).decode('ascii').split('\n')
+    print_columns(filenames)
 
-main()
+    print("\n\033[95mDark themes:\033[0m")
+    filenameCommand = "ls ~/Pictures/dark"
+    filenames = subprocess.check_output(filenameCommand, shell=True).decode('ascii').split('\n')
+    print_columns(filenames)
+
+def print_columns(filenames):
+    if len(filenames) % 2 != 0:
+        filenames.append("")
+
+    for a, b, c in zip(filenames[::3], filenames[1::3], filenames[2::3]):
+        print("{:<30}{:<30}{:<}".format(a[:-4], b[:-4], c[:-4])) # [:-4] strips file extensions for a cleaner look
+
+def select_theme(theme_name):
+    filenameCommand = "ls ~/Pictures/light"
+    filenames = subprocess.check_output(filenameCommand, shell=True).decode('ascii').split('\n')
+    for filename in filenames:
+        if filename[:-4] == theme_name:
+            image_path = "light/" + filename
+            main(theme_name, image_path)
+    
+    filenameCommand = "ls ~/Pictures/dark"
+    filenames = subprocess.check_output(filenameCommand, shell=True).decode('ascii').split('\n')
+    for filename in filenames:
+        if filename[:-4] == theme_name:
+            image_path = "dark/" + filename
+            main(theme_name, image_path)
+    print("Error: Could not find theme: " + theme_name)
+
+
+if len(sys.argv) > 1:
+    if sys.argv[1] == "-l" or sys.argv[1] == "--list":
+        list_themes()
+    elif sys.argv[1] == "-t" or sys.argv[1] == "--theme":
+        try:
+            select_theme(sys.argv[2])
+        except IndexError:
+            print("Please specify a theme name with this option.")
+    else:
+        print("Unknown argument " + sys.argv[1] + ".")
+else:
+    main()
 
 
