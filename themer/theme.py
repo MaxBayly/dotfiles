@@ -26,6 +26,7 @@ def main(theme=None, image_path=None):
 
     print("Changing theme to", theme, "...")
     set_background(image_path)
+    send_notification(theme, image_path)
     colour_hexes = get_palette(image_path)
     colour_hexes[NCMPCPP_MAIN_COLOUR_INDEX] = get_contrast_colours(colour_hexes)
     write_configs(colour_hexes)
@@ -211,6 +212,11 @@ def select_theme(theme_name):
             image_path = "dark/" + filename
             main(theme_name, image_path)
     print("Error: Could not find theme: " + theme_name)
+
+def send_notification(theme, path):
+    notifyCommand = f"notify-send 'Theme Set' 'Theme has been set to {theme}' -i ~/Pictures/{path}"
+    print(notifyCommand)
+    subprocess.run(notifyCommand, shell=True)
 
 
 if len(sys.argv) > 1:
