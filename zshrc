@@ -7,6 +7,9 @@ alias plex="sudo systemctl start plexmediaserver.service; chromium --new-window 
 function aur() {
 	git clone https://aur.archlinux.org/"$1".git ~/repos/aur/"$1" && cd ~/repos/aur/"$1"
 }
+function scan() {
+	hp-scan -d "hpaio:/net/envy_4500_series?ip=192.168.0.103&queue=false" --mode color --output /home/rroche/Documents/scans/$1.png; convert /home/rroche/Documents/scans/$1.png -alpha off /home/rroche/Documents/scans/$1.png; scp -r -i ~/.ssh/server_rsa /home/rroche/Documents/scans/$1.png rroche@192.168.0.79:~/sites/paperless-ng/consume/$1.png
+}
 alias install="sudo pacman -Syu"
 alias nord="sudo systemctl start nordvpnd.service; nordvpn connect"
 alias nw="chromium --new-window"
@@ -140,6 +143,9 @@ POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="%{%B%F{black}%K{yellow}%} $user_symbo
 POWERLEVEL9K_VCS_MODIFIED_BACKGROUND='16'
 
 alias l="la -lGah"
+function bandit() {
+	ssh bandit$1@bandit.labs.overthewire.org -p 2220
+}
 #source /home/rroche/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
 #login scripts
 #sudo apfs-fuse -o allow_other /dev/nvme0n1p2 /media/rroche/macos
