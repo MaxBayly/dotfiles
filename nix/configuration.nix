@@ -175,6 +175,10 @@ in
       enable = true;
       defaultEditor = true;
     };
+
+    zoxide = {
+      enable = true;
+    };
   };
 
   nixpkgs.config = {

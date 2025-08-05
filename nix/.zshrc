@@ -16,5 +16,7 @@ export PATH=$PATH:/usr/local/bin
 export EDITOR="code --wait"
 export NIX_PATH="/home/rroche/repos/dotfiles/nix/configuration.nix"
 
+alias cd="z"
+
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
