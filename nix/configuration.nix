@@ -135,9 +135,9 @@ in
     # picom.enable = true;
     pipewire = {
       enable = true;
-      alsa.enable = true;
-      alsa.support32Bit = true;
-      pulse.enable = true;
+      # alsa.enable = true;
+      # alsa.support32Bit = true;
+      # pulse.enable = true;
       jack.enable = true;
       wireplumber.enable = true;
     };
@@ -151,12 +151,6 @@ in
       xwayland = {
         enable = true;
       };
-    };
-    waybar = {
-      enable = true;
-      package = pkgs.waybar.overrideAttrs (oldAttrs: {
-        mesonFlags = oldAttrs.mesonFlags ++ [ "-Dexperimental=true" ];
-      });
     };
     thunar = {
       enable = true;
@@ -252,6 +246,7 @@ in
     util-linux
     via
     vscode-fhs
+    waybar
     wgnord
     wireguard-tools
     wl-clipboard
