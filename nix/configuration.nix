@@ -18,6 +18,12 @@ in
     ./hardware-configuration.nix
   ];
 
+  nix.nixPath = [
+    "nixos-config=/home/rroche/repos/dotfiles/nix/configuration.nix"
+    "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
+    "/nix/var/nix/profiles/per-user/root/channels"
+  ];
+
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -200,8 +206,10 @@ in
     firefox-wayland
     flashfocus
     fuseiso
+    fzf
     git
     adwaita-icon-theme
+    gcc
     gnome-themes-extra
     nautilus
     grim
