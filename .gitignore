@@ -8,3 +8,4 @@ de421.bsp
 themers/target
 config/polybar/colors.ini
 config/glava/radial.glsl
+.venv/*
