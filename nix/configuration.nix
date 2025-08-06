@@ -196,6 +196,7 @@ in
   };
 
   environment.systemPackages = with pkgs; [
+    hyprshell
     adwaita-qt
     adwaita-qt6
     alacritty
