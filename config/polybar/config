@@ -169,7 +169,7 @@ font-4 = "MesloLGL Nerd Font Mono:style=RegularForPowerline:size=12;2"
 ;volume brightness battery_bar 
 
 modules-left = i3 cpu memory alsa filesystem
-modules-center = player-mpris-tail mpd
+modules-center = spotify mpd
 modules-right =  checknetwork temperature date ;colors-switch
 
 ; The separator will be inserted between the output of each module
