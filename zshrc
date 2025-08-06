@@ -1,7 +1,9 @@
 #~/.screenlayout/custom.sh
-export PATH=$PATH:/home/rroche/repos/dotfiles/
+export PATH=$PATH:/home/rroche/repos/dotfiles/:/opt/resolve/bin:/home/rroche/.cargo/bin:/home/rroche/.ghcup/bin/
 export KUNST_MUSIC_DIR=/mass/medix/Music/
 export KUNST_SIZE="500x500"
+export QT_QPA_PLATFORMTHEME="qt5ct"
+export QT_STYLE_OVERRIDE="kvantum"
 alias plex="sudo systemctl start plexmediaserver.service; chromium --new-window http://192.168.0.40:32400/web/index.html# &"
 #; sudo chmod 777 /run/media/rroche" sudo apfs-fuse -o allow_other /dev/nvme0n1p2 /media/rroche/macos; sudo mount -t hfsplus -o force,rw /dev/sdc2 /media/storagemount; 
 function aur() {
@@ -24,6 +26,10 @@ alias artwork="nohup kunst &"
 alias dotfiles="cd ~/repos/dotfiles"
 alias polyrestart="pkill polybar && ~/repos/dotfiles/config/polybar/launch.sh"
 alias notes="code ~/repos/foam-notes"
+alias beem="python /home/rroche/repos/firefly-investment-updater/beem_splitter/main.py"
+alias mortgage="python /home/rroche/repos/firefly-investment-updater/mortgage_tracker/main.py"
+alias twomonitors="xrandr --output DP-0 --pos 2560x0 --rate 165 --mode 2560x1440 --output DP-2 --primary --mode 2560x1440 --rate 180 --pos 0x0 --rotate normal"
+#alias ytm="YouTube-Music-Desktop-App-1.13.0.AppImage --no-sandbox"
 
 # function picker() {
 #     picker.sh "$1"
@@ -146,10 +152,11 @@ alias l="la -lGah"
 function bandit() {
 	ssh bandit$1@bandit.labs.overthewire.org -p 2220
 }
-#source /home/rroche/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
 #login scripts
 #sudo apfs-fuse -o allow_other /dev/nvme0n1p2 /media/rroche/macos
 #systemctl start plexmediaserver.service
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+source /usr/share/nvm/init-nvm.sh
