@@ -29,6 +29,8 @@ alias notes="code ~/repos/foam-notes"
 alias beem="python /home/rroche/repos/firefly-investment-updater/beem_splitter/main.py"
 alias mortgage="python /home/rroche/repos/firefly-investment-updater/mortgage_tracker/main.py"
 alias twomonitors="xrandr --output DP-0 --pos 2560x0 --rate 165 --mode 2560x1440 --output DP-2 --primary --mode 2560x1440 --rate 180 --pos 0x0 --rotate normal"
+alias cd="z"
+
 #alias ytm="YouTube-Music-Desktop-App-1.13.0.AppImage --no-sandbox"
 
 # function picker() {
@@ -160,3 +162,4 @@ function bandit() {
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 source /usr/share/nvm/init-nvm.sh
+eval "$(zoxide init zsh)"
